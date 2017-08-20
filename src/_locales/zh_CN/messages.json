@@ -1,0 +1,29 @@
+{
+	"name": {
+		"message": "稍后再看"
+	},
+	"description": {
+		"message": "在 页面/链接/框架/音视频 上添加一个右键菜单，将其加入稍后再看列表"
+	},
+	"createContextMenuError": {
+		"message": "readLater右键菜单创建失败"
+	},
+	"setStorageError": {
+		"message": "设置readLater配置失败"
+	},
+	"getStorageError": {
+		"message": "获取readLater配置失败"
+	},
+	"createTabError": {
+		"message": "打开网页失败"
+	},
+	"addTime": {
+		"message": "加入时间"
+	},
+	"title": {
+		"message": "标题"
+	},
+	"delete": {
+		"message": "删除"
+	}
+}
