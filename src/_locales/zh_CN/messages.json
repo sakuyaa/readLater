@@ -3,7 +3,7 @@
 		"message": "稍后再看"
 	},
 	"description": {
-		"message": "在 页面/链接/框架/音视频 上添加一个右键菜单，将其加入稍后再看列表"
+		"message": "添加一个右键菜单在 页面/链接/框架/音视频 上，点击将其加入稍后再看列表"
 	},
 	"createContextMenuError": {
 		"message": "readLater右键菜单创建失败"
@@ -18,7 +18,7 @@
 		"message": "打开网页失败"
 	},
 	"addTime": {
-		"message": "加入时间"
+		"message": "添加时间"
 	},
 	"title": {
 		"message": "标题"
