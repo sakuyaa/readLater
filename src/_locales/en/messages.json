@@ -1,0 +1,29 @@
+{
+	"name": {
+		"message": "Read Later"
+	},
+	"description": {
+		"message": "Create a item to the browser's context menu when the user right clicks on page/link/frame/audio/video, and adds to Read-it-later list when the context menu item is clicked"
+	},
+	"createContextMenuError": {
+		"message": "Unable to create context menu"
+	},
+	"setStorageError": {
+		"message": "Unable to save configuration"
+	},
+	"getStorageError": {
+		"message": "Unable to read configuration"
+	},
+	"createTabError": {
+		"message": "Unable to create a tab"
+	},
+	"addTime": {
+		"message": "Add time"
+	},
+	"title": {
+		"message": "Title"
+	},
+	"delete": {
+		"message": "Delete"
+	}
+}
