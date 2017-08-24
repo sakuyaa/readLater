@@ -9,15 +9,25 @@ let readLater = {
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
 	},
-	addData: (url, title) => {
+	addData: (url, title, scrollTop) => {
 		browser.storage.sync.get({urls: []}).then(item => {
 			let date = new Date();
-			item.urls.push({
-				url: url,
-				title: title,
-				date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
-					' ' + date.toTimeString().split(' ')[0]
-			});
+			if (scrollTop) {
+				item.urls.push({
+					url: url,
+					title: title,
+					scrollTop: scrollTop,
+					date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
+						' ' + date.toTimeString().split(' ')[0]
+				});
+			} else {
+				item.urls.push({
+					url: url,
+					title: title,
+					date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
+						' ' + date.toTimeString().split(' ')[0]
+				});
+			}
 			browser.storage.sync.set(item).then(null, e => {
 				readLater.notify(e, browser.i18n.getMessage('setStorageError'));
 			});
@@ -39,14 +49,19 @@ browser.contextMenus.create({
 });
 browser.contextMenus.onClicked.addListener((info, tab) => {
 	if (info.menuItemId == 'read-later') {
-		if (info.frameUrl) {
-			readLater.addData(info.frameUrl, tab.title);
-		} else if (info.linkUrl) {
+		if (info.linkUrl) {
 			readLater.addData(info.linkUrl, tab.title);
 		} else if (info.srcUrl) {
 			readLater.addData(info.srcUrl, tab.title);
 		} else if (info.pageUrl) {
-			readLater.addData(info.pageUrl, tab.title);
+			browser.tabs.executeScript({
+				code: 'document.documentElement.scrollTop'
+			}).then(results => {
+				readLater.addData(info.pageUrl, tab.title, results[0]);
+			}, e => {
+				console.log('Execute script fail: ' + e);
+				readLater.addData(info.pageUrl, tab.title);
+			});
 		}
 	}
 });

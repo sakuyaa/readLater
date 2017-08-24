@@ -32,6 +32,13 @@ let readLater = {
 			button.textContent = urls[i].title;
 			button.addEventListener('click', () => {
 				browser.tabs.create({url: urls[i].url}).then(() => {
+					if (urls[i].scrollTop) {
+						browser.tabs.executeScript({
+							code: 'document.documentElement.scrollTop = ' + urls[i].scrollTop
+						}).then(null, e => {
+							console.log('Execute script fail: ' + e);
+						});
+					}
 					readLater.removeData(urls, i);
 					window.close();
 				}, e => {
