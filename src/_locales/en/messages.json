@@ -3,7 +3,7 @@
 		"message": "Read Later"
 	},
 	"description": {
-		"message": "Create a item to the browser's context menu when the user right clicks on page/link/frame/audio/video, and adds to Read-it-later list when the context menu item is clicked"
+		"message": "Create a item to the browser's context menu when the user right clicks on page/link/audio/video, and adds to Read-it-later list when the context menu item is clicked"
 	},
 	"createContextMenuError": {
 		"message": "Unable to create context menu"

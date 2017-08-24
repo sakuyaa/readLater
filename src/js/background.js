@@ -28,7 +28,7 @@ let readLater = {
 };
 
 browser.contextMenus.create({
-	contexts: ['audio', 'frame', 'link', 'page', 'video'],
+	contexts: ['audio', 'link', 'page', 'video'],
 	documentUrlPatterns: ['<all_urls>'],   //exclude privileged URL
 	id: 'read-later',
 	title: browser.i18n.getMessage('name')
