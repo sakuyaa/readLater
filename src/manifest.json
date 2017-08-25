@@ -8,7 +8,7 @@
 	},
 	"author": "sakuyaa",
 	"background": {
-		"scripts": ["js/background.js"]
+		"scripts": ["js/readLater.js", "js/background.js"]
 	},
 	"browser_action": {
 		"browser_style": true,
