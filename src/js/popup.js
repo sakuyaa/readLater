@@ -1,7 +1,7 @@
 'use strict';
 
 let table = document.getElementById('list'),
-	tr = document.createElement('tr'),
+	tr = table.insertRow(0),
 	th = document.createElement('th');
 th.textContent = browser.i18n.getMessage('addTime');
 tr.appendChild(th);
@@ -11,18 +11,17 @@ tr.appendChild(th);
 th = document.createElement('th');
 th.textContent = browser.i18n.getMessage('remove');
 tr.appendChild(th);
-table.appendChild(tr);
 
 browser.runtime.getBackgroundPage().then(page => {
 	let list = page.readLater.list,
-		td, button;
-	for (let i in list) {
-		tr = document.createElement('tr');
-		td = document.createElement('td');
+		td, button, cellIndex;
+	for (let i = 0; i < list.length; i++) {
+		tr = table.insertRow(i + 1);   //add 1 row represent table header
+		cellIndex = 0;
+		td = tr.insertCell(cellIndex++);
 		td.textContent = list[i].date;
-		tr.appendChild(td);
 		
-		td = document.createElement('td');
+		td = tr.insertCell(cellIndex++);
 		button = document.createElement('button');
 		button.setAttribute('title', list[i].url);
 		button.setAttribute('type', 'button');
@@ -43,14 +42,13 @@ browser.runtime.getBackgroundPage().then(page => {
 			});
 		}, false);
 		td.appendChild(button);
-		tr.appendChild(td);
 		
-		td = document.createElement('td');
+		td = tr.insertCell(cellIndex++);
 		button = document.createElement('button');
 		button.setAttribute('type', 'button');
 		button.textContent = '×';
 		button.addEventListener('click', e => {
-			for (let j in table.rows) {
+			for (let j = 0; j < table.rows.length; j++) {
 				if (table.rows[j] == e.target.parentNode.parentNode) {
 					page.readLater.removeData(j - 1);   //minus 1 to exclude table header
 					table.deleteRow(j);
@@ -59,9 +57,6 @@ browser.runtime.getBackgroundPage().then(page => {
 			}
 		}, false);
 		td.appendChild(button);
-		tr.appendChild(td);
-		
-		table.appendChild(tr);
 	}
 }, e => {
 	page.readLater.notify(e, browser.i18n.getMessage('getBackgroundPageError'));
