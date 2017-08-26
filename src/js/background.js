@@ -30,13 +30,21 @@ var readLater = {
 					' ' + date.toTimeString().split(' ')[0]
 			});
 		}
-		browser.storage.sync.set({list: readLater.list}).then(null, e => {
+		browser.storage.sync.set({list: readLater.list}).then(() => {
+			browser.browserAction.setBadgeText({
+				text: readLater.list.length ? readLater.list.length.toString() : ''
+			});
+		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
 		});
 	},
 	removeData: index => {
 		readLater.list.splice(index, 1);
-		browser.storage.sync.set({list: readLater.list}).then(null, e => {
+		browser.storage.sync.set({list: readLater.list}).then(() => {
+			browser.browserAction.setBadgeText({
+				text: readLater.list.length ? readLater.list.length.toString() : ''
+			});
+		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
 		});
 	},
@@ -72,6 +80,9 @@ var readLater = {
 		});
 		browser.storage.sync.get({list: []}).then(item => {
 			readLater.list = item.list;
+			if (readLater.list.length) {
+				browser.browserAction.setBadgeText({text: readLater.list.length.toString()});
+			}
 		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('getStorageError'));
 		});
