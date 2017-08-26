@@ -50,8 +50,13 @@ browser.runtime.getBackgroundPage().then(page => {
 		button.setAttribute('type', 'button');
 		button.textContent = '×';
 		button.addEventListener('click', e => {
-			page.readLater.removeData(i);
-			table.removeChild(e.target.parentNode.parentNode);   //remove row
+			for (let j in table.rows) {
+				if (table.rows[j] == e.target.parentNode.parentNode) {
+					page.readLater.removeData(j - 1);   //minus 1 to exclude table header
+					table.deleteRow(j);
+					break;
+				}
+			}
 		}, false);
 		td.appendChild(button);
 		tr.appendChild(td);
