@@ -59,5 +59,10 @@ browser.runtime.getBackgroundPage().then(page => {
 		td.appendChild(button);
 	}
 }, e => {
-	page.readLater.notify(e, browser.i18n.getMessage('getBackgroundPageError'));
+	browser.notifications.create({
+		type: 'basic',
+		message: e,
+		title: browser.i18n.getMessage('getBackgroundPageError'),
+		iconUrl: browser.extension.getURL('readLater.svg')
+	});
 });
