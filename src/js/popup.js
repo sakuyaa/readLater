@@ -1,44 +1,21 @@
 'use strict';
 
-let table = document.getElementById('list'),
-	tr = table.insertRow(0),
-	th = document.createElement('th');
-th.textContent = browser.i18n.getMessage('addTime');
-tr.appendChild(th);
-th = document.createElement('th');
-th.textContent = browser.i18n.getMessage('title');
-tr.appendChild(th);
-th = document.createElement('th');
-th.textContent = browser.i18n.getMessage('remove');
-tr.appendChild(th);
-
-browser.runtime.getBackgroundPage().then(page => {
-	let list = page.readLater.list,
-		td, button, cellIndex;
-	for (let i = 0; i < list.length; i++) {
-		tr = table.insertRow(i + 1);   //add 1 row represent table header
-		cellIndex = 0;
-		td = tr.insertCell(cellIndex++);
-		td.textContent = list[i].date;
-		
-		td = tr.insertCell(cellIndex++);
-		button = document.createElement('button');
-		button.setAttribute('title', list[i].url);
-		button.setAttribute('type', 'button');
-		button.textContent = list[i].title;
-		button.addEventListener('click', () => {
-			browser.tabs.create({url: list[i].url}).then(() => {
-				if (list[i].scrollTop) {
-					browser.tabs.executeScript({
-						code: 'document.documentElement.scrollTop = ' + list[i].scrollTop
-					}).then(null, e => {
-						console.log('Execute script fail: ' + e);
-					});
-				}
-				page.readLater.removeData(i);
-				window.close();
-			}, e => {
-				page.readLater.notify(e, browser.i18n.getMessage('createTabError'));
+let readLater = {
+	list: [],
+	
+	notify: (message, title) => {
+		browser.notifications.create({
+			type: 'basic',
+			message: message,
+			title: title,
+			iconUrl: browser.extension.getURL('readLater.svg')
+		});
+	},
+	removeData: index => {
+		readLater.list.splice(index, 1);
+		browser.storage.sync.set({list: readLater.list}).then(() => {
+			browser.browserAction.setBadgeText({
+				text: readLater.list.length ? readLater.list.length.toString() : ''
 			});
 		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
