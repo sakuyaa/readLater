@@ -11,12 +11,15 @@ let readLater = {
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
 	},
-	removeData: index => {
+	removeData: (index, close) => {
 		readLater.list.splice(index, 1);
 		browser.storage.sync.set({list: readLater.list}).then(() => {
 			browser.browserAction.setBadgeText({
 				text: readLater.list.length ? readLater.list.length.toString() : ''
 			});
+			if (close) {   //Close window after setStorage and setBadgeText
+				window.close();
+			}
 		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
 		});
@@ -45,8 +48,7 @@ let readLater = {
 							console.log('Execute script fail: ' + e);
 						});
 					}
-					readLater.removeData(i);
-					window.close();
+					readLater.removeData(i, true);
 				}, e => {
 					readLater.notify(e, browser.i18n.getMessage('createTabError'));
 				});
