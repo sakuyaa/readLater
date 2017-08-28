@@ -1,9 +1,6 @@
 'use strict';
 
-//variables that were declared using const or let do not appear in the Window object returned by runtime.getBackgroundPage()
-var readLater = {
-	list: [],
-	
+let readLater = {
 	notify: (message, title) => {
 		browser.notifications.create({
 			type: 'basic',
@@ -13,42 +10,35 @@ var readLater = {
 		});
 	},
 	addData: (url, title, scrollTop) => {
-		let date = new Date();
-		if (scrollTop) {
-			readLater.list.push({
-				url: url,
-				title: title,
-				scrollTop: scrollTop,
-				date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
-					' ' + date.toTimeString().split(' ')[0]
-			});
-		} else {
-			readLater.list.push({
-				url: url,
-				title: title,
-				date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
-					' ' + date.toTimeString().split(' ')[0]
-			});
-		}
-		browser.storage.sync.set({list: readLater.list}).then(() => {
-			browser.browserAction.setBadgeText({
-				text: readLater.list.length ? readLater.list.length.toString() : ''
-			});
-		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
-		});
-	},
-	removeData: index => {
-		readLater.list.splice(index, 1);
-		browser.storage.sync.set({list: readLater.list}).then(() => {
-			browser.browserAction.setBadgeText({
-				text: readLater.list.length ? readLater.list.length.toString() : ''
+		browser.storage.sync.get({list: []}).then(item => {
+			let date = new Date();
+			if (scrollTop) {
+				item.list.push({
+					url: url,
+					title: title,
+					scrollTop: scrollTop,
+					date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
+						' ' + date.toTimeString().split(' ')[0]
+				});
+			} else {
+				item.list.push({
+					url: url,
+					title: title,
+					date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
+						' ' + date.toTimeString().split(' ')[0]
+				});
+			}
+			browser.storage.sync.set(item).then(() => {
+				browser.browserAction.setBadgeText({
+					text: item.list.length ? item.list.length.toString() : ''
+				});
+			}, e => {
+				readLater.notify(e, browser.i18n.getMessage('setStorageError'));
 			});
 		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
+			readLater.notify(e, browser.i18n.getMessage('getStorageError'));
 		});
 	},
-	
 	init: () => {
 		browser.contextMenus.create({
 			contexts: ['audio', 'link', 'page', 'video'],
@@ -100,9 +90,8 @@ var readLater = {
 			}
 		});
 		browser.storage.sync.get({list: []}).then(item => {
-			readLater.list = item.list;
-			if (readLater.list.length) {
-				browser.browserAction.setBadgeText({text: readLater.list.length.toString()});
+			if (item.list.length) {
+				browser.browserAction.setBadgeText({text: item.list.length.toString()});
 			}
 		}, e => {
 			readLater.notify(e, browser.i18n.getMessage('getStorageError'));

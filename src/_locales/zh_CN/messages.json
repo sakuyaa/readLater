@@ -17,9 +17,6 @@
 	"createTabError": {
 		"message": "打开网页失败"
 	},
-	"getBackgroundPageError": {
-		"message": "无法读取后台数据"
-	},
 	"addTime": {
 		"message": "添加时间"
 	},

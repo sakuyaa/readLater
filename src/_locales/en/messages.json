@@ -17,9 +17,6 @@
 	"createTabError": {
 		"message": "Unable to create a tab"
 	},
-	"getBackgroundPageError": {
-		"message": "Unable to read background data"
-	},
 	"addTime": {
 		"message": "Add time"
 	},
