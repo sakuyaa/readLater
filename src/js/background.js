@@ -68,7 +68,8 @@ let readLater = {
 							}\
 							return document.title;\
 						}\
-						getLinkTitle("' + info.linkUrl + '");'
+						getLinkTitle("' + info.linkUrl + '");',
+						runAt: 'document_start'
 					}).then(results => {
 						readLater.addData(info.linkUrl, results[0]);
 					}, e => {
@@ -79,7 +80,8 @@ let readLater = {
 					readLater.addData(info.srcUrl, tab.title);
 				} else if (info.pageUrl) {
 					browser.tabs.executeScript({
-						code: 'document.documentElement.scrollTop'
+						code: 'document.documentElement.scrollTop',
+						runAt: 'document_start'
 					}).then(results => {
 						readLater.addData(info.pageUrl, tab.title, results[0]);
 					}, e => {
