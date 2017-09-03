@@ -5,7 +5,7 @@ let readLater = {
 		browser.notifications.create({
 			type: 'basic',
 			message: message,
-			title: title,
+			title: browser.i18n.getMessage(title),
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
 	},
@@ -33,10 +33,10 @@ let readLater = {
 					text: item.list.length ? item.list.length.toString() : ''
 				});
 			}, e => {
-				readLater.notify(e, browser.i18n.getMessage('setStorageError'));
+				readLater.notify(e, 'setStorageError');
 			});
 		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('getStorageError'));
+			readLater.notify(e, 'getStorageError');
 		});
 	},
 	init: () => {
@@ -47,7 +47,7 @@ let readLater = {
 			title: browser.i18n.getMessage('name')
 		}, () => {
 			if (browser.runtime.lastError) {
-				readLater.notify(browser.runtime.lastError, browser.i18n.getMessage('createContextMenuError'));
+				readLater.notify(browser.runtime.lastError, 'createContextMenuError');
 			}
 		});
 		browser.contextMenus.onClicked.addListener((info, tab) => {
@@ -96,7 +96,7 @@ let readLater = {
 				browser.browserAction.setBadgeText({text: item.list.length.toString()});
 			}
 		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('getStorageError'));
+			readLater.notify(e, 'getStorageError');
 		});
 	}
 };

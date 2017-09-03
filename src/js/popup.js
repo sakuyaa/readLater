@@ -7,7 +7,7 @@ let readLater = {
 		browser.notifications.create({
 			type: 'basic',
 			message: message,
-			title: title,
+			title: browser.i18n.getMessage(title),
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
 	},
@@ -21,7 +21,7 @@ let readLater = {
 				window.close();
 			}
 		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('setStorageError'));
+			readLater.notify(e, 'setStorageError');
 		});
 	},
 	
@@ -50,7 +50,7 @@ let readLater = {
 					}
 					readLater.removeData(i, true);
 				}, e => {
-					readLater.notify(e, browser.i18n.getMessage('createTabError'));
+					readLater.notify(e, 'createTabError');
 				});
 			}, false);
 			td.appendChild(button);
@@ -88,7 +88,7 @@ let readLater = {
 			readLater.list = item.list;
 			readLater.buildTr(table);
 		}, e => {
-			readLater.notify(e, browser.i18n.getMessage('getStorageError'));
+			readLater.notify(e, 'getStorageError');
 		});
 	}
 };
