@@ -53,29 +53,33 @@ let readLater = {
 		browser.contextMenus.onClicked.addListener((info, tab) => {
 			if (info.menuItemId == 'read-later') {
 				if (info.linkUrl) {
-					browser.tabs.executeScript({
-						code: '\
-						function getLinkTitle(linkUrl) {\
-							let link = document.querySelector(\'[href="\' + linkUrl + \'"]\');\
-							if (link) {\
-								return link.textContent;\
-							}\
-							link = document.querySelectorAll(\'a\');\
-							for (let a of link) {\
-								if (linkUrl == a.href) {\
-									return a.textContent;\
+					if (info.linkText) {   //Require Firefox 56
+						readLater.addData(info.linkUrl, info.linkText);
+					} else {
+						browser.tabs.executeScript({
+							code: '\
+							function getLinkTitle(linkUrl) {\
+								let link = document.querySelector(\'[href="\' + linkUrl + \'"]\');\
+								if (link) {\
+									return link.textContent;\
 								}\
+								link = document.querySelectorAll(\'a\');\
+								for (let a of link) {\
+									if (linkUrl == a.href) {\
+										return a.textContent;\
+									}\
+								}\
+								return document.title;\
 							}\
-							return document.title;\
-						}\
-						getLinkTitle("' + info.linkUrl + '");',
-						runAt: 'document_start'
-					}).then(results => {
-						readLater.addData(info.linkUrl, results[0]);
-					}, e => {
-						console.log('Execute script fail: ' + e);
-						readLater.addData(info.linkUrl, tab.title);
-					});
+							getLinkTitle("' + info.linkUrl + '");',
+							runAt: 'document_start'
+						}).then(results => {
+							readLater.addData(info.linkUrl, results[0]);
+						}, e => {
+							console.log('Execute script fail: ' + e);
+							readLater.addData(info.linkUrl, tab.title);
+						});
+					}
 				} else if (info.srcUrl) {
 					readLater.addData(info.srcUrl, tab.title);
 				} else if (info.pageUrl) {
