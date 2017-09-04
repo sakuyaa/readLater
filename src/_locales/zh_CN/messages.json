@@ -14,6 +14,9 @@
 	"getStorageError": {
 		"message": "获取readLater配置失败"
 	},
+	"parseJSONError": {
+		"message": "导入readLater配置失败"
+	},
 	"createTabError": {
 		"message": "打开网页失败"
 	},
@@ -25,5 +28,11 @@
 	},
 	"remove": {
 		"message": "移除"
+	},
+	"import": {
+		"message": "导入"
+	},
+	"export": {
+		"message": "导出"
 	}
 }

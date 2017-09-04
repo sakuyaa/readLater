@@ -25,6 +25,9 @@
 	},
 	"manifest_version": 2,
 	"name": "__MSG_name__",
+	"options_ui": {
+		"page": "html/options.html"
+	},
 	"permissions": [
 		"<all_urls>",
 		"contextMenus",
