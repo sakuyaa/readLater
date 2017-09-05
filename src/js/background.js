@@ -41,7 +41,7 @@ let readLater = {
 	},
 	init: () => {
 		browser.contextMenus.create({
-			contexts: ['audio', 'link', 'page', 'video'],
+			contexts: ['audio', 'editable', 'frame', 'image', 'link', 'page', 'selection', 'video'],
 			documentUrlPatterns: ['<all_urls>'],   //exclude privileged URL
 			id: 'read-later',
 			title: browser.i18n.getMessage('name')
@@ -80,9 +80,9 @@ let readLater = {
 							readLater.addData(info.linkUrl, tab.title);
 						});
 					}
-				} else if (info.srcUrl) {
+				} else if (info.srcUrl && info.mediaType != 'image') {
 					readLater.addData(info.srcUrl, tab.title);
-				} else if (info.pageUrl) {
+				} else {
 					browser.tabs.executeScript({
 						code: 'document.documentElement.scrollTop',
 						runAt: 'document_start'
