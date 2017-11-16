@@ -37,6 +37,15 @@
 							"strict_min_version": "53.0"
 						}
 					}
+				},
+				{
+					"version": "1.1.2",
+					"update_link": "https://raw.githubusercontent.com/sakuyaa/readLater/master/release/readLater-1.1.2.xpi",
+					"applications": {
+						"gecko": {
+							"strict_min_version": "53.0"
+						}
+					}
 				}
 			]
 		}
