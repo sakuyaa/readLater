@@ -6,7 +6,7 @@ let readLater = {
 	notify: (message, title) => {
 		browser.notifications.create({
 			type: 'basic',
-			message: message,
+			message: message + '',
 			title: browser.i18n.getMessage(title),
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
