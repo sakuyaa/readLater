@@ -26,29 +26,28 @@ let readLater = {
 	},
 	
 	buildTr: table => {
-		let list = readLater.list,
-			tr, td, button, cellIndex;
-		for (let i = 0; i < list.length; i++) {
+		let tr, td, button, cellIndex;
+		readLater.list.forEach((site, i) => {
 			tr = table.insertRow(i + 1);   //add 1 row represent table header
 			cellIndex = 0;
 			td = tr.insertCell(cellIndex++);
-			td.textContent = list[i].date;
+			td.textContent = site.date;
 			
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
-			button.setAttribute('title', list[i].url);
+			button.setAttribute('title', site.url);
 			button.setAttribute('type', 'button');
-			button.textContent = list[i].title;
+			button.textContent = site.title;
 			button.addEventListener('click', () => {
-				browser.tabs.create({url: list[i].url}).then(() => {
-					if (list[i].scrollTop) {
+				browser.tabs.create({url: site.url}).then(() => {
+					if (site.scrollTop) {
 						browser.tabs.executeScript({
-							code: 'document.documentElement.scrollTop = ' + list[i].scrollTop
+							code: 'document.documentElement.scrollTop = ' + site.scrollTop
 						}).then(null, e => {
 							console.log('Execute script fail: ' + e);
 						});
 					}
-					readLater.removeData(i, true);
+					readLater.removeData(readLater.list.indexOf(site), true);   //remove correct data
 				}, e => {
 					readLater.notify(e, 'createTabError');
 				});
@@ -69,7 +68,7 @@ let readLater = {
 				}
 			}, false);
 			td.appendChild(button);
-		}
+		});
 	},
 	init: () => {
 		let table = document.getElementById('list'),
