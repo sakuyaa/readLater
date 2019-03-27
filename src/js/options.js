@@ -47,7 +47,7 @@ let readLater = {
 				reader.readAsText(input.files[0]);
 			}, {once: true});
 			input.click();
-		}, false);
+		});
 		document.getElementById('export').textContent = browser.i18n.getMessage('export');
 		document.getElementById('export').addEventListener('click', () => {
 			browser.storage.sync.get({list: []}).then(item => {
@@ -55,7 +55,7 @@ let readLater = {
 			}, e => {
 				readLater.notify(e, 'getStorageError');
 			});
-		}, false);
+		});
 	}
 };
 
