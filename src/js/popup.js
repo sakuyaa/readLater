@@ -35,7 +35,7 @@ let readLater = {
 			
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
-			button.setAttribute('title', site.url);
+			button.setAttribute('title', site.url + '\n' + site.title);
 			button.setAttribute('type', 'button');
 			button.textContent = site.title;
 			button.addEventListener('click', () => {
