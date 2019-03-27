@@ -19,7 +19,7 @@
 				font-size: 1.3em;
 			}
 			td {
-				padding: .3em .5em;
+				padding: .2em .5em;
 			}
 			td:first-child {
 				white-space: nowrap;
@@ -27,11 +27,18 @@
 			td:last-child {
 				text-align: center;
 			}
+			div {
+				height: 2em;
+				max-width: 50em;
+			}
 			button {
 				background-color: #F9F9F9;
 				border: thin solid gray;
 				border-radius: .5em;
 				height: 1.8em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 				width: 100%;
 			}
 			button:hover {

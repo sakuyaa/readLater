@@ -26,7 +26,7 @@ let readLater = {
 	},
 	
 	buildTr: table => {
-		let tr, td, button, cellIndex;
+		let tr, td, div, button, cellIndex;
 		readLater.list.forEach((site, i) => {
 			tr = table.insertRow(i + 1);   //add 1 row represent table header
 			cellIndex = 0;
@@ -51,8 +51,10 @@ let readLater = {
 				}, e => {
 					readLater.notify(e, 'createTabError');
 				});
-			}, false);
-			td.appendChild(button);
+			});
+			div = document.createElement('div');
+			div.appendChild(button);
+			td.appendChild(div);
 			
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
@@ -66,7 +68,7 @@ let readLater = {
 						break;
 					}
 				}
-			}, false);
+			});
 			td.appendChild(button);
 		});
 	},
