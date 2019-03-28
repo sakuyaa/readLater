@@ -1,0 +1,44 @@
+{
+	"name": {
+		"message": "稍後再看"
+	},
+	"description": {
+		"message": "新增一個右鍵選單在 頁面/連結/音訊/視訊 上，點選將其加入稍後再看列表"
+	},
+	"createContextMenuError": {
+		"message": "readLater右鍵選單建立失敗"
+	},
+	"setStorageError": {
+		"message": "設定readLater配置失敗"
+	},
+	"getStorageError": {
+		"message": "獲取readLater配置失敗"
+	},
+	"parseJSONError": {
+		"message": "匯入readLater配置失敗"
+	},
+	"createTabError": {
+		"message": "開啟網頁失敗"
+	},
+	"addTime": {
+		"message": "添加時間"
+	},
+	"title": {
+		"message": "標題"
+	},
+	"remove": {
+		"message": "移除"
+	},
+	"copyURL": {
+		"message": "點選複製URL"
+	},
+	"copied": {
+		"message": "URL已複製"
+	},
+	"import": {
+		"message": "匯入"
+	},
+	"export": {
+		"message": "匯出"
+	}
+}
