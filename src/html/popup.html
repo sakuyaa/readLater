@@ -7,6 +7,13 @@
 				background-color: #EEEEEE;
 				font-family: "microsoft yahei", sans-serif;
 			}
+			input {
+				left: 0;
+				opacity: 0;
+				position: absolute;
+				top: 0;
+				z-index: -9;
+			}
 			table {
 				border: medium solid gray;
 				margin: .1em;
@@ -41,15 +48,16 @@
 				white-space: nowrap;
 				width: 100%;
 			}
-			button:hover {
+			td:first-child:hover, button:hover {
 				background-color: #CCCCCC;
 			}
-			button:active {
+			td:first-child:active, button:active {
 				background-color: #BBBBBB;
 			}
 		</style>
 	</head>
 	<body>
+		<input id="input" />
 		<table id="list" rules="all" />
 		<script src="../js/popup.js"></script>
 	</body>

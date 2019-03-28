@@ -29,6 +29,12 @@
 	"remove": {
 		"message": "移除"
 	},
+	"copyURL": {
+		"message": "点击复制URL"
+	},
+	"copied": {
+		"message": "URL已复制"
+	},
 	"import": {
 		"message": "导入"
 	},

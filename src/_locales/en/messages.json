@@ -29,6 +29,12 @@
 	"remove": {
 		"message": "Remove"
 	},
+	"copyURL": {
+		"message": "Click to copy URL"
+	},
+	"copied": {
+		"message": "URL copied"
+	},
 	"import": {
 		"message": "Import"
 	},

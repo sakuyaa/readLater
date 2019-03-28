@@ -27,11 +27,19 @@ let readLater = {
 	
 	buildTr: table => {
 		let tr, td, div, button, cellIndex;
+		let input = document.getElementById('input');
 		readLater.list.forEach((site, i) => {
 			tr = table.insertRow(i + 1);   //add 1 row represent table header
 			cellIndex = 0;
 			td = tr.insertCell(cellIndex++);
+			td.setAttribute('title', browser.i18n.getMessage('copyURL'));
 			td.textContent = site.date;
+			td.addEventListener('click', () => {
+				input.value = site.url;
+				input.select();
+				document.execCommand('copy');
+				event.target.textContent = browser.i18n.getMessage('copied');
+			});
 			
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
