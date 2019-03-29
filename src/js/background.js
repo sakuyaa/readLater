@@ -19,6 +19,7 @@ let readLater = {
 				date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
 					' ' + date.toTimeString().split(' ')[0]
 			});
+			browser.storage.sync.set(item).then(() => {
 				browser.browserAction.setBadgeText({
 					text: item.list.length ? item.list.length.toString() : ''
 				});
@@ -60,7 +61,7 @@ let readLater = {
 		}
 	}
 	return document.title;
-})('${info.linkUrl}');`
+})('${info.linkUrl}');`,
 							runAt: 'document_start'
 						}).then(results => {
 							readLater.addData(info.linkUrl, results[0]);
