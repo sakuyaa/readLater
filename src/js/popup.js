@@ -81,9 +81,9 @@ let readLater = {
 		});
 	},
 	init: () => {
-		let table = document.getElementById('list'),
-			tr = table.insertRow(0),
-			th = document.createElement('th');
+		let table = document.getElementById('list');
+		let tr = table.insertRow(0);
+		let th = document.createElement('th');
 		th.textContent = browser.i18n.getMessage('addTime');
 		tr.appendChild(th);
 		th = document.createElement('th');
