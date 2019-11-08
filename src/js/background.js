@@ -16,8 +16,8 @@ let readLater = {
 				url: url,
 				title: title,
 				scrollTop: scrollTop ? scrollTop : 0,
-				date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() +
-					' ' + date.toTimeString().split(' ')[0]
+				date: date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).substr(-2) + '/' +
+					('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0]
 			});
 			browser.storage.sync.set(item).then(() => {
 				browser.browserAction.setBadgeText({
