@@ -47,9 +47,9 @@ let readLater = {
 			button.setAttribute('type', 'button');
 			button.textContent = site.title;
 			button.addEventListener('click', () => {
-				browser.tabs.create({url: site.url}).then(() => {
+				browser.tabs.create({url: site.url}).then(tab => {
 					if (site.scrollTop) {
-						browser.tabs.executeScript({
+						browser.tabs.executeScript(tab.id, {
 							code: 'document.documentElement.scrollTop = ' + site.scrollTop
 						}).then(null, e => {
 							console.log('Execute script fail: ' + e);
