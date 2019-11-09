@@ -2,6 +2,7 @@
 
 let readLater = {
 	list: [],
+	openInBackground: false,
 	
 	notify: (message, title) => {
 		browser.notifications.create({
@@ -47,7 +48,10 @@ let readLater = {
 			button.setAttribute('type', 'button');
 			button.textContent = site.title;
 			button.addEventListener('click', () => {
-				browser.tabs.create({url: site.url}).then(tab => {
+				browser.tabs.create({
+					active: !readLater.openInBackground,
+					url: site.url
+				}).then(tab => {
 					if (site.scrollTop) {
 						browser.tabs.executeScript(tab.id, {
 							code: 'document.documentElement.scrollTop = ' + site.scrollTop
@@ -93,8 +97,11 @@ let readLater = {
 		th.textContent = browser.i18n.getMessage('remove');
 		tr.appendChild(th);
 		
-		browser.storage.sync.get({list: []}).then(item => {
-			readLater.list = item.list;
+		browser.storage.sync.get().then(storage => {
+			if (storage.openInBackground) {
+				readLater.openInBackground = storage.openInBackground;
+			}
+			readLater.list = storage.list;
 			readLater.buildTr(table);
 		}, e => {
 			readLater.notify(e, 'getStorageError');

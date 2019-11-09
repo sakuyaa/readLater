@@ -35,6 +35,9 @@
 	"copied": {
 		"message": "URL已複製"
 	},
+	"openInBackground": {
+		"message": "後臺開啟新標籤頁"
+	},
 	"import": {
 		"message": "匯入"
 	},

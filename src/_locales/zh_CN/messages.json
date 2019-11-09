@@ -35,6 +35,9 @@
 	"copied": {
 		"message": "URL已复制"
 	},
+	"openInBackground": {
+		"message": "后台打开新标签页"
+	},
 	"import": {
 		"message": "导入"
 	},

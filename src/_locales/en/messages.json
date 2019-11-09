@@ -35,6 +35,9 @@
 	"copied": {
 		"message": "URL copied"
 	},
+	"openInBackground": {
+		"message": "Open tabs in background"
+	},
 	"import": {
 		"message": "Import"
 	},
