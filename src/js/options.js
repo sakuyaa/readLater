@@ -19,10 +19,25 @@ let readLater = {
 			readLater.notify(e, 'parseJSONError');
 			return;
 		}
+		if (storage.config) {
+			let storageNew = {};
+			storageNew.config = storage.config;
+			for (let key in storage) {
+				if (key == 'config') {
+					continue;
+				}
+				//make sure the date match the key
+				storageNew[(new Date(storage[key].date)).getTime()] = storage[key];
+			}
+			storage = storageNew;
+		} else {
+			storage = readLater.toNewFormat(storage);   //transfer to new format
+		}
 		browser.storage.sync.clear().then(() => browser.storage.sync.set(storage)).then(() => {
-			$id('open-in-background').checked = storage.openInBackground;
+			$id('open-in-background').checked = storage.config.openInBackground;
+			let num = Object.keys(storage).length - 1;
 			browser.browserAction.setBadgeText({
-				text: storage.list.length ? storage.list.length.toString() : ''
+				text: num ? num + '' : ''
 			});
 		}, e => {
 			readLater.notify(e, 'setStorageError');
@@ -35,13 +50,17 @@ let readLater = {
 		download.dispatchEvent(new MouseEvent('click'));
 	},
 	init: () => {
-		browser.storage.sync.get('openInBackground').then(storage => {
-			$id('open-in-background').checked = storage.openInBackground;
+		browser.storage.sync.get('config').then(storage => {
+			$id('open-in-background').checked = storage.config.openInBackground;
 		}, e => {
 			readLater.notify(e, 'getStorageError');
 		});
 		$id('open-in-background').addEventListener('click', e => {
-			browser.storage.sync.set({openInBackground: e.target.checked}).then(null, e => {
+			browser.storage.sync.set({
+				config: {
+					openInBackground: e.target.checked
+				}
+			}).then(null, e => {
 				readLater.notify(e, 'setStorageError');
 			});
 		});
@@ -70,6 +89,22 @@ let readLater = {
 				readLater.notify(e, 'getStorageError');
 			});
 		});
+	},
+	toNewFormat: storage => {
+		let storageNew = {
+			config: {
+				openInBackground: storage.openInBackground ? true : false
+			}
+		};
+		if (storage.list) {
+			let date;
+			for (let item of storage.list) {
+				date = new Date(item.date);
+				item.date = date.toISOString();
+				storageNew[date.getTime()] = item;
+			}
+		}
+		return storageNew;
 	}
 };
 

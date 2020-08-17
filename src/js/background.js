@@ -10,24 +10,25 @@ let readLater = {
 		});
 	},
 	addData: (url, title, scrollTop) => {
-		browser.storage.sync.get({list: []}).then(item => {
-			let date = new Date();
-			item.list.push({
-				url: url,
-				title: title,
-				scrollTop: scrollTop ? scrollTop : 0,
-				date: date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).substr(-2) + '/' +
-					('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0]
-			});
-			browser.storage.sync.set(item).then(() => {
+		let date = new Date();
+		let item = {};
+		item[date.getTime()] = {
+			date: date.toISOString(),
+			scrollTop: scrollTop ? scrollTop : 0,
+			title: title,
+			url: url
+		};
+		browser.storage.sync.set(item).then(() => {
+			browser.storage.sync.get().then(storage => {
+				let num = Object.keys(storage).length - 1;   //except config key
 				browser.browserAction.setBadgeText({
-					text: item.list.length ? item.list.length.toString() : ''
+					text: num ? num + '' : ''
 				});
 			}, e => {
-				readLater.notify(e, 'setStorageError');
+				readLater.notify(e, 'getStorageError');
 			});
 		}, e => {
-			readLater.notify(e, 'getStorageError');
+			readLater.notify(e, 'setStorageError');
 		});
 	},
 	init: () => {
@@ -85,13 +86,42 @@ let readLater = {
 				}
 			}
 		});
-		browser.storage.sync.get({list: []}).then(item => {
-			if (item.list.length) {
-				browser.browserAction.setBadgeText({text: item.list.length.toString()});
+		browser.storage.sync.get().then(storage => {
+			if (storage.config) {   //new format exists
+				let num = Object.keys(storage).length - 1;   //except config key
+				browser.browserAction.setBadgeText({
+					text: num ? num + '' : ''
+				});
+				return;
 			}
+			storage = readLater.toNewFormat(storage);   //transfer to new format
+			browser.storage.sync.clear().then(() => browser.storage.sync.set(storage)).then(() => {
+				let num = Object.keys(storage).length - 1;
+				browser.browserAction.setBadgeText({
+					text: num ? num + '' : ''
+				});
+			}, e => {
+				readLater.notify(e, 'setStorageError');
+			});
 		}, e => {
 			readLater.notify(e, 'getStorageError');
 		});
+	},
+	toNewFormat: storage => {
+		let storageNew = {
+			config: {
+				openInBackground: storage.openInBackground ? true : false
+			}
+		};
+		if (storage.list) {
+			let date;
+			for (let item of storage.list) {
+				date = new Date(item.date);
+				item.date = date.toISOString();
+				storageNew[date.getTime()] = item;
+			}
+		}
+		return storageNew;
 	}
 };
 

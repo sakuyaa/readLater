@@ -1,9 +1,6 @@
 'use strict';
 
 let readLater = {
-	list: [],
-	openInBackground: false,
-	
 	notify: (message, title) => {
 		browser.notifications.create({
 			type: 'basic',
@@ -12,54 +9,64 @@ let readLater = {
 			iconUrl: browser.extension.getURL('readLater.svg')
 		});
 	},
-	removeData: (index, close) => {
-		readLater.list.splice(index, 1);
-		browser.storage.sync.set({list: readLater.list}).then(() => {
-			browser.browserAction.setBadgeText({
-				text: readLater.list.length ? readLater.list.length.toString() : ''
+	removeData: (key, close) => {
+		browser.storage.sync.remove(key).then(() => {
+			browser.storage.sync.get().then(storage => {
+				let num = Object.keys(storage).length - 1;   //except config key
+				browser.browserAction.setBadgeText({
+					text: num ? num + '' : ''
+				});
+				if (close) {   //Close window after setStorage and setBadgeText
+					window.close();
+				}
+			}, e => {
+				readLater.notify(e, 'getStorageError');
 			});
-			if (close) {   //Close window after setStorage and setBadgeText
-				window.close();
-			}
 		}, e => {
 			readLater.notify(e, 'setStorageError');
 		});
 	},
 	
-	buildTr: table => {
-		let tr, td, div, button, cellIndex;
+	buildTr: (table, storage) => {
+		let tr, td, div, button, cellIndex, date;
 		let input = document.getElementById('input');
-		readLater.list.forEach((site, i) => {
-			tr = table.insertRow(i + 1);   //add 1 row represent table header
+		let index = 1;   //add 1 row represent table header
+		for (let key in storage) {
+			if (key == 'config') {
+				continue;
+			}
+			tr = table.insertRow(index++);
 			cellIndex = 0;
 			td = tr.insertCell(cellIndex++);
 			td.setAttribute('title', browser.i18n.getMessage('copyURL'));
-			td.textContent = site.date;
+			date = new Date(storage[key].date);
+			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
+				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
 			td.addEventListener('click', () => {
-				input.value = site.url;
+				input.value = storage[key].url;
 				input.select();
 				document.execCommand('copy');
 				event.target.textContent = browser.i18n.getMessage('copied');
 			});
-			
+
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
-			button.setAttribute('title', site.url + '\n' + site.title);
+			button.setAttribute('title', storage[key].url + '\n' + storage[key].title);
 			button.setAttribute('type', 'button');
-			button.textContent = site.title;
+			button.textContent = storage[key].title;
 			button.addEventListener('click', () => {
 				browser.tabs.create({
-					active: !readLater.openInBackground,
-					url: site.url
+					active: !storage.config.openInBackground,
+					url: storage[key].url
 				}).then(tab => {
-					if (site.scrollTop) {
+					if (storage[key].scrollTop) {
 						browser.tabs.executeScript(tab.id, {
-							code: 'document.documentElement.scrollTop = ' + site.scrollTop
+							code: 'document.documentElement.scrollTop = ' + storage[key].scrollTop
 						}).then(null, e => {
 							console.log('Execute script fail: ' + e);
 						});
 					}
-					readLater.removeData(readLater.list.indexOf(site), true);   //remove correct data
+					readLater.removeData(key, true);
 				}, e => {
 					readLater.notify(e, 'createTabError');
 				});
@@ -67,22 +74,17 @@ let readLater = {
 			div = document.createElement('div');
 			div.appendChild(button);
 			td.appendChild(div);
-			
+
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
 			button.setAttribute('type', 'button');
 			button.textContent = '×';
 			button.addEventListener('click', e => {
-				for (let j = 0; j < table.rows.length; j++) {
-					if (table.rows[j] == e.target.parentNode.parentNode) {
-						readLater.removeData(j - 1);   //minus 1 to exclude table header
-						table.deleteRow(j);
-						break;
-					}
-				}
+				readLater.removeData(key);
+				table.deleteRow(e.target.parentNode.parentNode.rowIndex);
 			});
 			td.appendChild(button);
-		});
+		}
 	},
 	init: () => {
 		let table = document.getElementById('list');
@@ -98,11 +100,7 @@ let readLater = {
 		tr.appendChild(th);
 		
 		browser.storage.sync.get().then(storage => {
-			if (storage.openInBackground) {
-				readLater.openInBackground = storage.openInBackground;
-			}
-			readLater.list = storage.list;
-			readLater.buildTr(table);
+			readLater.buildTr(table, storage);
 		}, e => {
 			readLater.notify(e, 'getStorageError');
 		});
