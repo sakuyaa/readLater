@@ -32,7 +32,7 @@ let readLater = {
 		});
 	},
 	init: () => {
-		browser.contextMenus.create({
+		browser.menus.create({
 			contexts: ['audio', 'editable', 'frame', 'image', 'link', 'page', 'selection', 'video'],
 			documentUrlPatterns: ['<all_urls>'],   //exclude privileged URL
 			id: 'read-later',
@@ -42,7 +42,7 @@ let readLater = {
 				readLater.notify(browser.runtime.lastError, 'createContextMenuError');
 			}
 		});
-		browser.contextMenus.onClicked.addListener((info, tab) => {
+		browser.menus.onClicked.addListener((info, tab) => {
 			if (info.menuItemId == 'read-later') {
 				if (info.linkUrl) {
 					readLater.addData(info.linkUrl, info.linkText);   //Require Firefox 56

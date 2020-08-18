@@ -1,11 +1,4 @@
 {
-	"applications": {
-		"gecko": {
-			"id": "readLater@sakuyaa",
-			"strict_min_version": "56.0",
-			"update_url": "https://raw.githubusercontent.com/sakuyaa/readLater/master/release/updates.json"
-		}
-	},
 	"author": "sakuyaa",
 	"background": {
 		"scripts": ["js/background.js"]
@@ -16,7 +9,14 @@
 		"default_popup": "html/popup.html",
 		"default_title": "__MSG_name__"
 	},
-	"default_locale": "zh_CN",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "readLater@sakuyaa",
+			"strict_min_version": "56.0",
+			"update_url": "https://raw.githubusercontent.com/sakuyaa/readLater/master/release/updates.json"
+		}
+	},
+	"default_locale": "en",
 	"description": "__MSG_description__",
 	"homepage_url": "https://github.com/sakuyaa/readLater",
 	"icons": {
@@ -30,7 +30,7 @@
 	},
 	"permissions": [
 		"<all_urls>",
-		"contextMenus",
+		"menus",
 		"notifications",
 		"storage",
 		"tabs"
