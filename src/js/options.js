@@ -43,13 +43,16 @@ let readLater = {
 			readLater.notify(e, 'setStorageError');
 		});
 	},
-	exportConf: storage => {
-		let download = document.createElement('a');
-		download.setAttribute('download', 'readLater.json');
-		download.setAttribute('href', URL.createObjectURL(new Blob([JSON.stringify(storage, null, '\t')])));
-		download.dispatchEvent(new MouseEvent('click'));
+	exportConf: () => {
+		browser.storage.sync.get().then(storage => {
+			$id('download').setAttribute('href', URL.createObjectURL(new Blob([JSON.stringify(storage, null, '\t')])));
+			$id('download').click();
+		}, e => {
+			readLater.notify(e, 'getStorageError');
+		});
 	},
 	init: () => {
+		//config
 		browser.storage.sync.get('config').then(storage => {
 			$id('open-in-background').checked = storage.config.openInBackground;
 		}, e => {
@@ -65,30 +68,20 @@ let readLater = {
 			});
 		});
 		$id('open-in-background-text').textContent = browser.i18n.getMessage('openInBackground');
+		//import/export
+		$id('input').addEventListener('change', () => {
+			let reader = new FileReader();
+			reader.onload = () => {
+				readLater.importConf(reader.result);
+			};
+			reader.readAsText($id('input').files[0]);
+		});
 		$id('import').textContent = browser.i18n.getMessage('import');
 		$id('import').addEventListener('click', () => {
-			let input = document.createElement('input');
-			input.setAttribute('accept', 'application/json');
-			input.setAttribute('hidden', 'hidden');
-			input.setAttribute('type', 'file');
-			document.body.appendChild(input);
-			input.addEventListener('change', () => {
-				let reader = new FileReader();
-				reader.onload = () => {
-					readLater.importConf(reader.result);
-				};
-				reader.readAsText(input.files[0]);
-			}, {once: true});
-			input.click();
+			$id('input').click();
 		});
 		$id('export').textContent = browser.i18n.getMessage('export');
-		$id('export').addEventListener('click', () => {
-			browser.storage.sync.get().then(storage => {
-				readLater.exportConf(storage);
-			}, e => {
-				readLater.notify(e, 'getStorageError');
-			});
-		});
+		$id('export').addEventListener('click', readLater.exportConf);
 	},
 	toNewFormat: storage => {
 		let storageNew = {
