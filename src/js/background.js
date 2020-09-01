@@ -36,7 +36,7 @@ let readLater = {
 			contexts: ['audio', 'editable', 'frame', 'image', 'link', 'page', 'selection', 'video'],
 			documentUrlPatterns: ['<all_urls>'],   //exclude privileged URL
 			id: 'read-later',
-			title: browser.i18n.getMessage('name')
+			title: browser.i18n.getMessage('name') + '(&E)'
 		}, () => {
 			if (browser.runtime.lastError) {
 				readLater.notify(browser.runtime.lastError, 'createContextMenuError');
