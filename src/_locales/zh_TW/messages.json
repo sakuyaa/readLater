@@ -38,6 +38,9 @@
 	"openInBackground": {
 		"message": "後臺開啟新標籤頁"
 	},
+	"accessKey": {
+		"message": "設置快捷鍵(A-Z)："
+	},
 	"import": {
 		"message": "匯入"
 	},

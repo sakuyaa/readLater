@@ -38,6 +38,9 @@
 	"openInBackground": {
 		"message": "后台打开新标签页"
 	},
+	"accessKey": {
+		"message": "设置快捷键(A-Z)："
+	},
 	"import": {
 		"message": "导入"
 	},

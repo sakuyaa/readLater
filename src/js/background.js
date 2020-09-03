@@ -31,12 +31,16 @@ let readLater = {
 			readLater.notify(e, 'setStorageError');
 		});
 	},
-	init: () => {
+	initElement: storage => {
+		let num = Object.keys(storage).length - 1;   //except config key
+		browser.browserAction.setBadgeText({
+			text: num ? num + '' : ''
+		});
 		browser.menus.create({
 			contexts: ['audio', 'editable', 'frame', 'image', 'link', 'page', 'selection', 'video'],
 			documentUrlPatterns: ['<all_urls>'],   //exclude privileged URL
 			id: 'read-later',
-			title: browser.i18n.getMessage('name') + '(&E)'
+			title: browser.i18n.getMessage('name') + (storage.config.accessKey ? '(&' + storage.config.accessKey + ')' : '')
 		}, () => {
 			if (browser.runtime.lastError) {
 				readLater.notify(browser.runtime.lastError, 'createContextMenuError');
@@ -61,20 +65,16 @@ let readLater = {
 				}
 			}
 		});
+	},
+	init: () => {
 		browser.storage.sync.get().then(storage => {
 			if (storage.config) {   //new format exists
-				let num = Object.keys(storage).length - 1;   //except config key
-				browser.browserAction.setBadgeText({
-					text: num ? num + '' : ''
-				});
+				readLater.initElement(storage);
 				return;
 			}
 			storage = readLater.toNewFormat(storage);   //transfer to new format
 			browser.storage.sync.clear().then(() => browser.storage.sync.set(storage)).then(() => {
-				let num = Object.keys(storage).length - 1;
-				browser.browserAction.setBadgeText({
-					text: num ? num + '' : ''
-				});
+				readLater.initElement(storage);
 			}, e => {
 				readLater.notify(e, 'setStorageError');
 			});
@@ -85,6 +85,7 @@ let readLater = {
 	toNewFormat: storage => {
 		let storageNew = {
 			config: {
+				accessKey: 'E',
 				openInBackground: storage.openInBackground ? true : false
 			}
 		};

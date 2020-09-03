@@ -38,6 +38,9 @@
 	"openInBackground": {
 		"message": "Open tabs in background"
 	},
+	"accessKey": {
+		"message": "Setting access key (A-Z): "
+	},
 	"import": {
 		"message": "Import"
 	},

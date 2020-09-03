@@ -2,12 +2,21 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<style>
+			#access-key {
+				text-align: center;
+				text-transform: uppercase;
+				width: 2em;
+			}
+		</style>
 	</head>
 	<body>
 		<a id="download" download="readLater.json" hidden="hidden"></a>
 		<input id="input" accept="application/json" hidden="hidden" type="file" />
 		<div class="browser-style">
 			<input id="open-in-background" type="checkbox" /><label id="open-in-background-text" for="open-in-background"></label>
+			<br>
+			<label id="access-key-text" for="access-key"></label><input id="access-key" ondrop="return false;" onpaste="return false;" />
 		</div>
 		<div>
 			<button id="import" class="browser-style"></button>
