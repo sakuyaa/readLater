@@ -31,7 +31,7 @@ let readLater = {
 		let tr, td, div, button, cellIndex, date;
 		let input = document.getElementById('input');
 		let index = 1;   //add 1 row represent table header
-		for (let key in storage) {
+		for (let key of Object.keys(storage).sort()) {
 			if (key == 'config') {
 				continue;
 			}
