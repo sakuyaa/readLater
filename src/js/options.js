@@ -8,7 +8,7 @@ let readLater = {
 			type: 'basic',
 			message: message + '',
 			title: browser.i18n.getMessage(title),
-			iconUrl: browser.extension.getURL('readLater.svg')
+			iconUrl: browser.runtime.getURL('readLater.svg')
 		});
 	},
 	importConf: text => {
