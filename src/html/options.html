@@ -8,20 +8,23 @@
 				text-transform: uppercase;
 				width: 2em;
 			}
+			input {
+				margin-bottom: 1em;
+			}
+			button {
+				margin-right: .5em;
+			}
 		</style>
 	</head>
 	<body>
 		<a id="download" download="readLater.json" hidden="hidden"></a>
 		<input id="input" accept="application/json" hidden="hidden" type="file" />
-		<div class="browser-style">
-			<input id="open-in-background" type="checkbox" /><label id="open-in-background-text" for="open-in-background"></label>
-			<br>
-			<label id="access-key-text" for="access-key"></label><input id="access-key" ondrop="return false;" onpaste="return false;" />
-		</div>
-		<div>
-			<button id="import" class="browser-style"></button>
-			<button id="export" class="browser-style"></button>
-		</div>
+		<input id="open-in-background" type="checkbox" /><label id="open-in-background-text" for="open-in-background"></label>
+		<br>
+		<label id="access-key-text" for="access-key"></label><input id="access-key" ondrop="return false;" onpaste="return false;" />
+		<br>
+		<button id="import"></button>
+		<button id="export"></button>
 		<script src="../js/options.js"></script>
 	</body>
 </html>

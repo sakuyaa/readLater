@@ -5,8 +5,10 @@
 		<style>
 			body {
 				background-color: #EEEEEE;
+				font: caption;
 				font-family: "microsoft yahei", sans-serif;
 				overflow-y: scroll;
+				user-select: none;
 			}
 			input {
 				left: 0;
@@ -32,7 +34,7 @@
 			td:first-child {
 				white-space: nowrap;
 			}
-			td:last-child {
+			td:last-child > button {
 				text-align: center;
 			}
 			div {
@@ -47,6 +49,7 @@
 				overflow: hidden;
 				padding-inline-start: .6em;
 				padding-inline-end: .6em;
+				text-align: start;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				width: 100%;
