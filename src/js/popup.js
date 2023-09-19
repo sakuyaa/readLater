@@ -54,7 +54,7 @@ let readLater = {
 			button.setAttribute('title', storage[key].url + '\n' + storage[key].title);
 			button.setAttribute('type', 'button');
 			button.textContent = storage[key].title;
-			button.addEventListener('click', () => {
+			button.addEventListener('click', event => {
 				browser.tabs.create({
 					active: !storage.config.openInBackground,
 					url: storage[key].url
@@ -66,7 +66,9 @@ let readLater = {
 							console.log('Execute script fail: ' + e);
 						});
 					}
-					readLater.removeData(key, true);
+					if (!event.ctrlKey) {
+						readLater.removeData(key, true);
+					}
 				}, e => {
 					readLater.notify(e, 'createTabError');
 				});
