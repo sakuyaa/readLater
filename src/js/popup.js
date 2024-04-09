@@ -42,11 +42,11 @@ let readLater = {
 			date = new Date(storage[key].date);
 			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
 				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
-			td.addEventListener('click', () => {
+			td.addEventListener('click', e => {
 				input.value = storage[key].url;
 				input.select();
 				document.execCommand('copy');
-				event.target.textContent = browser.i18n.getMessage('copied');
+				e.target.textContent = browser.i18n.getMessage('copied');
 			});
 
 			td = tr.insertCell(cellIndex++);
