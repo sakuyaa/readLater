@@ -2,68 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<link rel="stylesheet" href="./table.css" />
 		<style>
 			body {
-				background-color: #EEEEEE;
-				font: caption;
-				font-family: "microsoft yahei", sans-serif;
 				overflow-y: scroll;
-				user-select: none;
-			}
-			input {
-				left: 0;
-				opacity: 0;
-				position: absolute;
-				top: 0;
-				z-index: -9;
-			}
-			table {
-				border: medium solid gray;
-				margin: .1em;
-			}
-			tr:hover {
-				background-color: #DDDDDD;
-			}
-			th {
-				background-color: #CCCCCC;
-				font-size: 1.3em;
-			}
-			td {
-				padding: .2em .5em;
-			}
-			td:first-child {
-				white-space: nowrap;
-			}
-			td:last-child > button {
-				text-align: center;
-			}
-			div {
-				height: 2em;
-				max-width: 39em;
-			}
-			button {
-				background-color: #F9F9F9;
-				border: thin solid gray;
-				border-radius: .5em;
-				height: 1.8em;
-				overflow: hidden;
-				padding-inline-start: .6em;
-				padding-inline-end: .6em;
-				text-align: start;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				width: 100%;
-			}
-			td:first-child:hover, button:hover {
-				background-color: #CCCCCC;
-			}
-			td:first-child:active, button:active {
-				background-color: #BBBBBB;
 			}
 		</style>
 	</head>
 	<body>
-		<input id="input" />
+		<input id="copy" />
 		<table id="list" rules="all" />
 		<script src="../js/popup.js"></script>
 	</body>

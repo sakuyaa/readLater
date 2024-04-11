@@ -1,3 +1,8 @@
+/**************************************************
+*	readLater by sakuyaa.
+*
+*	https://github.com/sakuyaa/
+**************************************************/
 'use strict';
 
 let readLater = {
@@ -9,30 +14,68 @@ let readLater = {
 			iconUrl: browser.runtime.getURL('readLater.svg')
 		});
 	},
-	removeData: (key, close) => {
-		browser.storage.sync.remove(key).then(() => {
-			browser.storage.sync.get().then(storage => {
-				let num = Object.keys(storage).length - 1;   //except config key
-				browser.browserAction.setBadgeText({
-					text: num ? num + '' : ''
-				});
-				if (close) {   //Close window after setStorage and setBadgeText
-					window.close();
-				}
-			}, e => {
-				readLater.notify(e, 'getStorageError');
+	removeData: async (removeKey, close) => {
+		let storage;
+		try {
+			storage = await browser.storage.sync.get();
+		} catch (e) {
+			readLater.notify(e, 'getStorageError');
+			return;
+		}
+		let historyList = {};
+		let num = 0, historyNum = 0;
+		for (let key of Object.keys(storage)) {
+			if (key == 'config') {
+				continue;
+			}
+			if (storage[key].removeDate) {
+				historyNum++;
+				historyList[(new Date(storage[key].removeDate)).getTime()] = storage[key];
+				historyList[(new Date(storage[key].removeDate)).getTime()].key = key;
+				continue;
+			}
+			num++;
+		}
+		let maxHistory = storage.config.maxHistory ? storage.config.maxHistory : 0;
+		try {
+			if (maxHistory) {
+				let item = {};
+				item[removeKey] = storage[removeKey];
+				item[removeKey].removeDate = (new Date()).toISOString();
+				await browser.storage.sync.set(item);
+				historyNum++;
+			} else {
+				await browser.storage.sync.remove(removeKey);
+			}
+			num--;
+			browser.browserAction.setBadgeText({
+				text: num ? num + '' : ''
 			});
-		}, e => {
+			if (historyNum > maxHistory) {   //Remove data which exceed max history list number
+				let removeNum = historyNum - maxHistory;
+				for (let key of Object.keys(historyList).sort()) {   //Sort by remove date
+					if (removeNum-- > 0) {
+						await browser.storage.sync.remove(historyList[key].key);
+					}
+				}
+			}
+		} catch (e) {
 			readLater.notify(e, 'setStorageError');
-		});
+		}
+		if (close) {   //Close window after setStorage and setBadgeText
+			window.close();
+		}
 	},
 	
 	buildTr: (table, storage) => {
-		let tr, td, div, button, cellIndex, date;
-		let input = document.getElementById('input');
+		let tr, td, button, cellIndex, date;
+		let copyInput = document.getElementById('copy');
 		let index = 1;   //add 1 row represent table header
 		for (let key of Object.keys(storage).sort()) {
 			if (key == 'config') {
+				continue;
+			}
+			if (storage[key].removeDate) {
 				continue;
 			}
 			tr = table.insertRow(index++);
@@ -43,8 +86,8 @@ let readLater = {
 			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
 				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
 			td.addEventListener('click', e => {
-				input.value = storage[key].url;
-				input.select();
+				copyInput.value = storage[key].url;
+				copyInput.select();
 				document.execCommand('copy');
 				e.target.textContent = browser.i18n.getMessage('copied');
 			});
@@ -62,7 +105,7 @@ let readLater = {
 					if (storage[key].scrollTop) {
 						browser.tabs.executeScript(tab.id, {
 							code: 'document.documentElement.scrollTop = ' + storage[key].scrollTop
-						}).then(null, e => {
+						}).catch(e => {
 							console.log('Execute script fail: ' + e);
 						});
 					}
@@ -73,9 +116,7 @@ let readLater = {
 					readLater.notify(e, 'createTabError');
 				});
 			});
-			div = document.createElement('div');
-			div.appendChild(button);
-			td.appendChild(div);
+			td.appendChild(button);
 
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');

@@ -2,29 +2,41 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<link rel="stylesheet" href="./table.css" />
 		<style>
+			#import, #export {
+				margin-right: .5em;
+			}
+			input {
+				margin-bottom: 1em;
+			}
 			#access-key {
 				text-align: center;
 				text-transform: uppercase;
 				width: 2em;
 			}
-			input {
-				margin-bottom: 1em;
+			#max-history {
+				width: 4em;
 			}
-			button {
-				margin-right: .5em;
+			td {
+				font-size: .5em;
 			}
 		</style>
 	</head>
 	<body>
 		<a id="download" download="readLater.json" hidden="hidden"></a>
 		<input id="input" accept="application/json" hidden="hidden" type="file" />
+		<button id="import"></button>
+		<button id="export"></button>
+		<br><br>
 		<input id="open-in-background" type="checkbox" /><label id="open-in-background-text" for="open-in-background"></label>
 		<br>
 		<label id="access-key-text" for="access-key"></label><input id="access-key" ondrop="return false;" onpaste="return false;" />
 		<br>
-		<button id="import"></button>
-		<button id="export"></button>
+		<label id="max-history-text" for="max-history"></label><input id="max-history" type="number" min="0" max="100">
+		<br>
+		<input id="copy" />
+		<table id="list" rules="all" hidden="hidden" />
 		<script src="../js/options.js"></script>
 	</body>
 </html>

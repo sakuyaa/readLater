@@ -1,3 +1,8 @@
+/**************************************************
+*	readLater by sakuyaa.
+*
+*	https://github.com/sakuyaa/
+**************************************************/
 'use strict';
 
 let readLater = {
@@ -20,7 +25,16 @@ let readLater = {
 		};
 		browser.storage.sync.set(item).then(() => {
 			browser.storage.sync.get().then(storage => {
-				let num = Object.keys(storage).length - 1;   //except config key
+				let num = 0;
+				for (let key of Object.keys(storage)) {
+					if (key == 'config') {
+						continue;
+					}
+					if (storage[key].removeDate) {
+						continue;
+					}
+					num++;
+				}
 				browser.browserAction.setBadgeText({
 					text: num ? num + '' : ''
 				});
@@ -32,7 +46,16 @@ let readLater = {
 		});
 	},
 	initElement: storage => {
-		let num = Object.keys(storage).length - 1;   //except config key
+		let num = 0;
+		for (let key of Object.keys(storage)) {
+			if (key == 'config') {
+				continue;
+			}
+			if (storage[key].removeDate) {
+				continue;
+			}
+			num++;
+		}
 		browser.browserAction.setBadgeText({
 			text: num ? num + '' : ''
 		});
@@ -86,6 +109,7 @@ let readLater = {
 		let storageNew = {
 			config: {
 				accessKey: 'E',
+				maxHistory: 0,
 				openInBackground: storage.openInBackground ? true : false
 			}
 		};

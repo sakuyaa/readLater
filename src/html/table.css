@@ -1,0 +1,52 @@
+/**************************************************
+*	readLater by sakuyaa.
+*
+*	https://github.com/sakuyaa/
+**************************************************/
+#copy {
+	opacity: 0;
+	position: absolute;
+	z-index: -9;
+}
+table {
+	background-color: #EEEEEE;
+	border: medium solid gray;
+	font: caption;
+	margin: .1em;
+	user-select: none;
+}
+tr:hover {
+	background-color: #DDDDDD;
+}
+th {
+	background-color: #CCCCCC;
+	font-size: 1.3em;
+}
+td {
+	height: 2em;
+	max-width: 39em;
+	padding: .2em .5em;
+	white-space: nowrap;
+}
+td > button {
+	background-color: #F9F9F9;
+	border: thin solid gray;
+	border-radius: .5em;
+	height: 1.8em;
+	overflow: hidden;
+	padding-inline-start: .6em;
+	padding-inline-end: .6em;
+	text-align: start;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+td:last-child > button {
+	text-align: center;
+}
+td:first-child:hover, button:hover {
+	background-color: #CCCCCC;
+}
+td:first-child:active, button:active {
+	background-color: #BBBBBB;
+}

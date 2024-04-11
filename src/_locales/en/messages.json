@@ -46,5 +46,11 @@
 	},
 	"export": {
 		"message": "Export"
+	},
+	"maxHistory": {
+		"message": "Max history list number: "
+	},
+	"removeTime": {
+		"message": "Remove Time"
 	}
 }

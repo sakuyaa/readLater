@@ -46,5 +46,11 @@
 	},
 	"export": {
 		"message": "匯出"
+	},
+	"maxHistory": {
+		"message": "最大歷史記錄條數："
+	},
+	"removeTime": {
+		"message": "移除時間"
 	}
 }
