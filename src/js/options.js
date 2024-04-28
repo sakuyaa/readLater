@@ -93,8 +93,15 @@ let readLater = {
 		});
 	},
 	buildTable: storage => {
+		let historyList = {};
+		for (let key of Object.keys(storage)) {
+			if (storage[key].removeDate) {
+				historyList[(new Date(storage[key].removeDate)).getTime()] = storage[key];
+			}
+		}
+
 		let table = $id('list');
-		if (!storage.config.maxHistory) {
+		if (!Object.keys(historyList).length) {
 			table.setAttribute('hidden', 'hidden');
 			return;
 		}
@@ -110,13 +117,6 @@ let readLater = {
 		th = document.createElement('th');
 		th.textContent = browser.i18n.getMessage('removeTime');
 		tr.appendChild(th);
-
-		let historyList = {};
-		for (let key of Object.keys(storage)) {
-			if (storage[key].removeDate) {
-				historyList[(new Date(storage[key].removeDate)).getTime()] = storage[key];
-			}
-		}
 
 		let td, button, cellIndex, date;
 		let copyInput = $id('copy');
