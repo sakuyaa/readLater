@@ -50,6 +50,9 @@
 	"maxHistory": {
 		"message": "Max history list number: "
 	},
+	"historyNum": {
+		"message": "Current history list number: "
+	},
 	"removeTime": {
 		"message": "Remove Time"
 	}

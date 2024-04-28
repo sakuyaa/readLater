@@ -99,6 +99,7 @@ let readLater = {
 				historyList[(new Date(storage[key].removeDate)).getTime()] = storage[key];
 			}
 		}
+		$id('history-num').textContent = '(' + browser.i18n.getMessage('historyNum') + Object.keys(historyList).length + ')';
 
 		let table = $id('list');
 		if (!Object.keys(historyList).length) {
