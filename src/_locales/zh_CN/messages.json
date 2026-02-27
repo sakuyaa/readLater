@@ -6,19 +6,19 @@
 		"message": "添加一个右键菜单在 页面/链接/音频/视频 上，点击将其加入稍后再看列表"
 	},
 	"createContextMenuError": {
-		"message": "readLater右键菜单创建失败"
+		"message": "稍后再看：右键菜单创建失败"
 	},
 	"setStorageError": {
-		"message": "设置readLater配置失败"
+		"message": "稍后再看：设置配置失败"
 	},
 	"getStorageError": {
-		"message": "获取readLater配置失败"
+		"message": "稍后再看：获取配置失败"
 	},
 	"parseJSONError": {
-		"message": "导入readLater配置失败"
+		"message": "稍后再看：导入配置失败"
 	},
 	"createTabError": {
-		"message": "打开网页失败"
+		"message": "稍后再看：打开网页失败"
 	},
 	"addTime": {
 		"message": "添加时间"
