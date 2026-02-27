@@ -3,11 +3,6 @@
 *
 *	https://github.com/sakuyaa/
 **************************************************/
-#copy {
-	opacity: 0;
-	position: absolute;
-	z-index: -9;
-}
 table {
 	background-color: #EEEEEE;
 	border: medium solid gray;

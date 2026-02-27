@@ -120,7 +120,6 @@ let readLater = {
 		tr.appendChild(th);
 
 		let td, button, cellIndex, date;
-		let copyInput = $id('copy');
 		let index = 1;   //add 1 row represent table header
 		for (let key of Object.keys(historyList).sort()) {
 			tr = table.insertRow(index++);
@@ -131,9 +130,7 @@ let readLater = {
 			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
 				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
 			td.addEventListener('click', e => {
-				copyInput.value = historyList[key].url;
-				copyInput.select();
-				document.execCommand('copy');
+				navigator.clipboard.writeText(historyList[key].url);
 				e.target.textContent = browser.i18n.getMessage('copied');
 			});
 
