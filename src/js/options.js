@@ -167,8 +167,11 @@ let readLater = {
 			date = new Date(item.date);
 			td.textContent = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${date.toTimeString().split(' ')[0]}`;
 			td.addEventListener('click', e => {
-				navigator.clipboard.writeText(item.url);
-				e.target.textContent = browser.i18n.getMessage('copied');
+				navigator.clipboard.writeText(item.url).then(() => {
+					e.target.textContent = browser.i18n.getMessage('copied');
+				}).catch(e => {
+					readLater.notify(e, 'writeTextError');
+				});
 			});
 
 			td = tr.insertCell(cellIndex++);

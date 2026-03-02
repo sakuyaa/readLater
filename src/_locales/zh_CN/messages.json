@@ -17,6 +17,9 @@
 	"parseJSONError": {
 		"message": "稍后再看：导入配置失败"
 	},
+	"writeTextError": {
+		"message": "稍后再看：写入剪贴板失败"
+	},
 	"createTabError": {
 		"message": "稍后再看：打开网页失败"
 	},

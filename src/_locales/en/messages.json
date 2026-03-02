@@ -17,6 +17,9 @@
 	"parseJSONError": {
 		"message": "Read Later: Unable to import configuration"
 	},
+	"writeTextError": {
+		"message": "Read Later: Unable to write to clipboard"
+	},
 	"createTabError": {
 		"message": "Read Later: Unable to create a tab"
 	},

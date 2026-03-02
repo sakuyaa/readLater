@@ -17,6 +17,9 @@
 	"parseJSONError": {
 		"message": "稍後再看：匯入配置失敗"
 	},
+	"writeTextError": {
+		"message": "稍後再看：寫入剪貼簿失敗"
+	},
 	"createTabError": {
 		"message": "稍後再看：開啟網頁失敗"
 	},
