@@ -128,13 +128,33 @@ let readLater = {
 		table.removeAttribute('hidden');
 		let tr = table.insertRow(0);
 		let th = document.createElement('th');
-		th.textContent = browser.i18n.getMessage('addTime');
+		switch (storage.config.sortHistory) {
+			case 'dateAsc':
+				th.textContent = browser.i18n.getMessage('addTime') + ' ↑';
+				break;
+			case 'dateDesc':
+				th.textContent = browser.i18n.getMessage('addTime') + ' ↓';
+				break;
+			default:
+				th.textContent = browser.i18n.getMessage('addTime');
+		}
 		tr.appendChild(th);
 		th = document.createElement('th');
 		th.textContent = browser.i18n.getMessage('title');
 		tr.appendChild(th);
 		th = document.createElement('th');
-		th.textContent = browser.i18n.getMessage('removeTime');
+		switch (storage.config.sortHistory) {
+			case 'dateAsc':
+			case 'dateDesc':
+				th.textContent = browser.i18n.getMessage('removeTime');
+				break;
+			case 'removeDateDesc':
+				th.textContent = browser.i18n.getMessage('removeTime') + ' ↓';
+				break;
+			case 'removeDateAsc':
+			default:
+				th.textContent = browser.i18n.getMessage('removeTime') + ' ↑';
+		}
 		tr.appendChild(th);
 
 		let td, button, cellIndex, date;
