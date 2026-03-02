@@ -224,6 +224,7 @@ let readLater = {
 		$id('open-in-background-text').textContent = browser.i18n.getMessage('openInBackground');
 		$id('open-in-background').addEventListener('click', () => {
 			readLater.settingConf(false);
+			readLater.initConf();
 		});
 		$id('access-key-text').textContent = browser.i18n.getMessage('accessKey');
 		$id('access-key').addEventListener('keyup', e => {
