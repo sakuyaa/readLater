@@ -41,6 +41,30 @@
 	"accessKey": {
 		"message": "Setting access key (A-Z): "
 	},
+	"sortPopup": {
+		"message": "Read later list sorting method: "
+	},
+	"sortPopupDateAsc": {
+		"message": "Add time (Ascending)"
+	},
+	"sortPopupDateDesc": {
+		"message": "Add time (Descending)"
+	},
+	"sortHistory": {
+		"message": "History list sorting method: "
+	},
+	"sortHistoryDateAsc": {
+		"message": "Add time (Ascending)"
+	},
+	"sortHistoryDateDesc": {
+		"message": "Add time (Descending)"
+	},
+	"sortHistoryRemoveDateAsc": {
+		"message": "Remove time (Ascending)"
+	},
+	"sortHistoryRemoveDateDesc": {
+		"message": "Remove time (Descending)"
+	},
 	"import": {
 		"message": "Import"
 	},

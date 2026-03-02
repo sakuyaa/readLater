@@ -7,7 +7,7 @@
 			#import, #export {
 				margin-right: .5em;
 			}
-			input {
+			input, select {
 				margin-bottom: 1em;
 			}
 			#access-key {
@@ -35,6 +35,20 @@
 		<label id="access-key-text" for="access-key"></label><input id="access-key" ondrop="return false;" onpaste="return false;" />
 		<br>
 		<label id="max-history-text" for="max-history"></label><input id="max-history" type="number" min="0" max="100"><label id="history-num"></label>
+		<br>
+		<label id="sort-popup-text" for="sort-popup"></label>
+		<select id="sort-popup">
+			<option id="sort-popup-date-asc" value="dateAsc" selected></option>
+			<option id="sort-popup-date-desc" value="dateDesc"></option>
+		</select>
+		<br>
+		<label id="sort-history-text" for="sort-history"></label>
+		<select id="sort-history">
+			<option id="sort-history-date-asc" value="dateAsc"></option>
+			<option id="sort-history-date-desc" value="dateDesc"></option>
+			<option id="sort-history-remove-date-asc" value="removeDateAsc" selected></option>
+			<option id="sort-history-remove-date-desc" value="removeDateDesc"></option>
+		</select>
 		<br>
 		<table id="list" rules="all" hidden="hidden" />
 		<script src="../js/options.js"></script>

@@ -66,48 +66,66 @@ let readLater = {
 			window.close();
 		}
 	},
-	
-	buildTr: (table, storage) => {
-		let tr, td, button, cellIndex, date;
+	buildTable: storage => {
+		let array = [], item;
+		for (let key of Object.keys(storage)) {
+			if (key == 'config' || storage[key].removeDate) {
+				continue;
+			}
+			item = storage[key];
+			item.key = key;
+			array.push(item);
+		}
+		array.sort((a, b) => {
+			return storage.config.sortPopup == 'dateDesc' ? b.date > a.date : a.date > b.date;
+		});
+
+		let table = document.getElementById('list');
+		table.innerHTML = '';
+		let tr = table.insertRow(0);
+		let th = document.createElement('th');
+		th.textContent = browser.i18n.getMessage('addTime');
+		tr.appendChild(th);
+		th = document.createElement('th');
+		th.textContent = browser.i18n.getMessage('title');
+		tr.appendChild(th);
+		th = document.createElement('th');
+		th.textContent = browser.i18n.getMessage('remove');
+		tr.appendChild(th);
+
+		let td, button, cellIndex, date;
 		let index = 1;   //add 1 row represent table header
-		for (let key of Object.keys(storage).sort()) {
-			if (key == 'config') {
-				continue;
-			}
-			if (storage[key].removeDate) {
-				continue;
-			}
+		for (let item of array) {
 			tr = table.insertRow(index++);
 			cellIndex = 0;
 			td = tr.insertCell(cellIndex++);
 			td.setAttribute('title', browser.i18n.getMessage('copyURL'));
-			date = new Date(storage[key].date);
-			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
-				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
+			date = new Date(item.date);
+			td.textContent = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${date.toTimeString().split(' ')[0]}`;
 			td.addEventListener('click', e => {
-				navigator.clipboard.writeText(storage[key].url);
+				navigator.clipboard.writeText(item.url);
 				e.target.textContent = browser.i18n.getMessage('copied');
 			});
 
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
-			button.setAttribute('title', storage[key].url + '\n' + storage[key].title);
+			button.setAttribute('title', item.url + '\n' + item.title);
 			button.setAttribute('type', 'button');
-			button.textContent = storage[key].title;
+			button.textContent = item.title;
 			button.addEventListener('click', event => {
 				browser.tabs.create({
 					active: !storage.config.openInBackground,
-					url: storage[key].url
+					url: item.url
 				}).then(tab => {
-					if (storage[key].scrollTop) {
+					if (item.scrollTop) {
 						browser.tabs.executeScript(tab.id, {
-							code: 'document.documentElement.scrollTop = ' + storage[key].scrollTop
+							code: 'document.documentElement.scrollTop = ' + item.scrollTop
 						}).catch(e => {
 							console.log('Execute script fail: ' + e);
 						});
 					}
 					if (!event.ctrlKey) {
-						readLater.removeData(key, true);
+						readLater.removeData(item.key, true);
 					}
 				}, e => {
 					readLater.notify(e, 'createTabError');
@@ -120,27 +138,15 @@ let readLater = {
 			button.setAttribute('type', 'button');
 			button.textContent = '×';
 			button.addEventListener('click', e => {
-				readLater.removeData(key);
+				readLater.removeData(item.key);
 				table.deleteRow(e.target.parentNode.parentNode.rowIndex);
 			});
 			td.appendChild(button);
 		}
 	},
 	init: () => {
-		let table = document.getElementById('list');
-		let tr = table.insertRow(0);
-		let th = document.createElement('th');
-		th.textContent = browser.i18n.getMessage('addTime');
-		tr.appendChild(th);
-		th = document.createElement('th');
-		th.textContent = browser.i18n.getMessage('title');
-		tr.appendChild(th);
-		th = document.createElement('th');
-		th.textContent = browser.i18n.getMessage('remove');
-		tr.appendChild(th);
-		
 		browser.storage.sync.get().then(storage => {
-			readLater.buildTr(table, storage);
+			readLater.buildTable(storage);
 		}, e => {
 			readLater.notify(e, 'getStorageError');
 		});

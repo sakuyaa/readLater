@@ -41,6 +41,30 @@
 	"accessKey": {
 		"message": "設置快捷鍵(A-Z)："
 	},
+	"sortPopup": {
+		"message": "稍後再看列表排序方式："
+	},
+	"sortPopupDateAsc": {
+		"message": "添加時間正序"
+	},
+	"sortPopupDateDesc": {
+		"message": "添加時間倒序"
+	},
+	"sortHistory": {
+		"message": "歷史記錄列表排序方式："
+	},
+	"sortHistoryDateAsc": {
+		"message": "添加時間正序"
+	},
+	"sortHistoryDateDesc": {
+		"message": "添加時間倒序"
+	},
+	"sortHistoryRemoveDateAsc": {
+		"message": "移除時間正序"
+	},
+	"sortHistoryRemoveDateDesc": {
+		"message": "移除時間倒序"
+	},
 	"import": {
 		"message": "匯入"
 	},

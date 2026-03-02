@@ -42,13 +42,16 @@ let readLater = {
 			$id('open-in-background').checked = storage.config.openInBackground;
 			$id('access-key').value = storage.config.accessKey ? storage.config.accessKey : '';
 			$id('max-history').value = storage.config.maxHistory ? storage.config.maxHistory : 0;
+			if (storage.config.sortPopup) {
+				$id('sort-popup').value = storage.config.sortPopup;
+			}
+			if (storage.config.sortHistory) {
+				$id('sort-history').value = storage.config.sortHistory;
+			}
 			readLater.buildTable(storage);
 			let num = 0;
 			for (let key of Object.keys(storage)) {
-				if (key == 'config') {
-					continue;
-				}
-				if (storage[key].removeDate) {
+				if (key == 'config' || storage[key].removeDate) {
 					continue;
 				}
 				num++;
@@ -78,7 +81,9 @@ let readLater = {
 			config: {
 				accessKey: $id('access-key').value,
 				maxHistory: parseInt($id('max-history').value),
-				openInBackground: $id('open-in-background').checked
+				openInBackground: $id('open-in-background').checked,
+				sortHistory: $id('sort-history').value,
+				sortPopup: $id('sort-popup').value
 			}
 		}).then(() => {
 			if (updateMenus) {
@@ -93,16 +98,29 @@ let readLater = {
 		});
 	},
 	buildTable: storage => {
-		let historyList = {};
-		for (let key of Object.keys(storage)) {
-			if (storage[key].removeDate) {
-				historyList[(new Date(storage[key].removeDate)).getTime()] = storage[key];
+		let array = [];
+		for (let item of Object.values(storage)) {
+			if (item.removeDate) {
+				array.push(item);
 			}
 		}
-		$id('history-num').textContent = '(' + browser.i18n.getMessage('historyNum') + Object.keys(historyList).length + ')';
+		array.sort((a, b) => {
+			switch (storage.config.sortHistory) {
+				case 'dateAsc':
+					return a.date > b.date;
+				case 'dateDesc':
+					return b.date > a.date;
+				case 'removeDateDesc':
+					return b.removeDate > a.removeDate;
+				case 'removeDateAsc':
+				default:
+					return a.removeDate > b.removeDate;
+			}
+		});
+		$id('history-num').textContent = '(' + browser.i18n.getMessage('historyNum') + array.length + ')';
 
 		let table = $id('list');
-		if (!Object.keys(historyList).length) {
+		if (!array.length) {
 			table.setAttribute('hidden', 'hidden');
 			return;
 		}
@@ -121,32 +139,31 @@ let readLater = {
 
 		let td, button, cellIndex, date;
 		let index = 1;   //add 1 row represent table header
-		for (let key of Object.keys(historyList).sort()) {
+		for (let item of array) {
 			tr = table.insertRow(index++);
 			cellIndex = 0;
 			td = tr.insertCell(cellIndex++);
 			td.setAttribute('title', browser.i18n.getMessage('copyURL'));
-			date = new Date(historyList[key].date);
-			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
-				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
+			date = new Date(item.date);
+			td.textContent = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${date.toTimeString().split(' ')[0]}`;
 			td.addEventListener('click', e => {
-				navigator.clipboard.writeText(historyList[key].url);
+				navigator.clipboard.writeText(item.url);
 				e.target.textContent = browser.i18n.getMessage('copied');
 			});
 
 			td = tr.insertCell(cellIndex++);
 			button = document.createElement('button');
-			button.setAttribute('title', historyList[key].url + '\n' + historyList[key].title);
+			button.setAttribute('title', item.url + '\n' + item.title);
 			button.setAttribute('type', 'button');
-			button.textContent = historyList[key].title;
+			button.textContent = item.title;
 			button.addEventListener('click', event => {
 				browser.tabs.create({
 					active: !storage.config.openInBackground,
-					url: historyList[key].url
+					url: item.url
 				}).then(tab => {
-					if (historyList[key].scrollTop) {
+					if (item.scrollTop) {
 						browser.tabs.executeScript(tab.id, {
-							code: 'document.documentElement.scrollTop = ' + historyList[key].scrollTop
+							code: 'document.documentElement.scrollTop = ' + item.scrollTop
 						}).catch(e => {
 							console.log('Execute script fail: ' + e);
 						});
@@ -158,21 +175,29 @@ let readLater = {
 			td.appendChild(button);
 
 			td = tr.insertCell(cellIndex++);
-			date = new Date(historyList[key].removeDate);
-			td.textContent = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).substr(-2) + '-' +
-				('0' + date.getDate()).substr(-2) + ' ' + date.toTimeString().split(' ')[0];
+			date = new Date(item.removeDate);
+			td.textContent = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${date.toTimeString().split(' ')[0]}`;
 		}
 	},
-	init: () => {
-		//config
+	initConf: () => {
 		browser.storage.sync.get().then(storage => {
 			$id('open-in-background').checked = storage.config.openInBackground;
 			$id('access-key').value = storage.config.accessKey ? storage.config.accessKey : '';
 			$id('max-history').value = storage.config.maxHistory ? storage.config.maxHistory : 0;
+			if (storage.config.sortPopup) {
+				$id('sort-popup').value = storage.config.sortPopup;
+			}
+			if (storage.config.sortHistory) {
+				$id('sort-history').value = storage.config.sortHistory;
+			}
 			readLater.buildTable(storage);
 		}, e => {
 			readLater.notify(e, 'getStorageError');
 		});
+	},
+	init: () => {
+		readLater.initConf();
+
 		$id('open-in-background-text').textContent = browser.i18n.getMessage('openInBackground');
 		$id('open-in-background').addEventListener('click', () => {
 			readLater.settingConf(false);
@@ -197,6 +222,22 @@ let readLater = {
 			$id('max-history').value = value;
 			readLater.settingConf(false);
 		});
+		$id('sort-popup-text').textContent = browser.i18n.getMessage('sortPopup');
+		$id('sort-popup-date-asc').textContent = browser.i18n.getMessage('sortPopupDateAsc');
+		$id('sort-popup-date-desc').textContent = browser.i18n.getMessage('sortPopupDateDesc');
+		$id('sort-popup').addEventListener('change', () => {
+			readLater.settingConf(false);
+		});
+		$id('sort-history-text').textContent = browser.i18n.getMessage('sortHistory');
+		$id('sort-history-date-asc').textContent = browser.i18n.getMessage('sortHistoryDateAsc');
+		$id('sort-history-date-desc').textContent = browser.i18n.getMessage('sortHistoryDateDesc');
+		$id('sort-history-remove-date-asc').textContent = browser.i18n.getMessage('sortHistoryRemoveDateAsc');
+		$id('sort-history-remove-date-desc').textContent = browser.i18n.getMessage('sortHistoryRemoveDateDesc');
+		$id('sort-history').addEventListener('change', () => {
+			readLater.settingConf(false);
+			readLater.initConf();
+		});
+
 		//import/export
 		$id('input').addEventListener('change', () => {
 			let reader = new FileReader();
@@ -217,7 +258,9 @@ let readLater = {
 			config: {
 				accessKey: 'E',
 				maxHistory: 0,
-				openInBackground: storage.openInBackground ? true : false
+				openInBackground: storage.openInBackground ? true : false,
+				sortHistory: 'removeDateAsc',
+				sortPopup: 'dateAsc'
 			}
 		};
 		if (storage.list) {

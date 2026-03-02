@@ -48,10 +48,7 @@ let readLater = {
 	initElement: storage => {
 		let num = 0;
 		for (let key of Object.keys(storage)) {
-			if (key == 'config') {
-				continue;
-			}
-			if (storage[key].removeDate) {
+			if (key == 'config' || storage[key].removeDate) {
 				continue;
 			}
 			num++;
@@ -110,7 +107,9 @@ let readLater = {
 			config: {
 				accessKey: 'E',
 				maxHistory: 0,
-				openInBackground: storage.openInBackground ? true : false
+				openInBackground: storage.openInBackground ? true : false,
+				sortHistory: 'removeDateAsc',
+				sortPopup: 'dateAsc'
 			}
 		};
 		if (storage.list) {
