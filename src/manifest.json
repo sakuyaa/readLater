@@ -11,6 +11,9 @@
 	},
 	"browser_specific_settings": {
 		"gecko": {
+			"data_collection_permissions": {
+				"required": ["none"]
+			},
 			"id": "readLater@sakuyaa",
 			"strict_min_version": "63.0",
 			"update_url": "https://raw.githubusercontent.com/sakuyaa/readLater/master/release/updates.json"
@@ -36,5 +39,5 @@
 		"storage",
 		"tabs"
 	],
-	"version": "3.1"
+	"version": "3.2"
 }
