@@ -134,7 +134,7 @@ let readLater = {
 					if (!event.ctrlKey) {
 						readLater.removeData(item.key, true);
 					}
-				}, e => {
+				}).catch(e => {
 					readLater.notify(e, 'createTabError');
 				});
 			});
@@ -154,7 +154,7 @@ let readLater = {
 	init: () => {
 		browser.storage.sync.get().then(storage => {
 			readLater.buildTable(storage);
-		}, e => {
+		}).catch(e => {
 			readLater.notify(e, 'getStorageError');
 		});
 	}

@@ -20,7 +20,7 @@ let readLater = {
 		let storage;
 		try {
 			storage = JSON.parse(text);
-		} catch(e) {
+		} catch (e) {
 			readLater.notify(e, 'parseJSONError');
 			return;
 		}
@@ -64,7 +64,7 @@ let readLater = {
 			}).catch(e => {
 				readLater.notify(e, 'createContextMenuError');
 			});
-		}, e => {
+		}).catch(e => {
 			readLater.notify(e, 'setStorageError');
 		});
 	},
@@ -72,7 +72,7 @@ let readLater = {
 		browser.storage.sync.get().then(storage => {
 			$id('download').setAttribute('href', URL.createObjectURL(new Blob([JSON.stringify(storage, null, '\t')])));
 			$id('download').click();
-		}, e => {
+		}).catch(e => {
 			readLater.notify(e, 'getStorageError');
 		});
 	},
@@ -93,7 +93,7 @@ let readLater = {
 					readLater.notify(e, 'createContextMenuError');
 				});
 			}
-		}, e => {
+		}).catch(e => {
 			readLater.notify(e, 'setStorageError');
 		});
 	},
@@ -191,7 +191,7 @@ let readLater = {
 							console.log('Execute script fail: ' + e);
 						});
 					}
-				}, e => {
+				}).catch(e => {
 					readLater.notify(e, 'createTabError');
 				});
 			});
@@ -214,7 +214,7 @@ let readLater = {
 				$id('sort-history').value = storage.config.sortHistory;
 			}
 			readLater.buildTable(storage);
-		}, e => {
+		}).catch(e => {
 			readLater.notify(e, 'getStorageError');
 		});
 	},
